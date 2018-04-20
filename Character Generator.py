@@ -1,4 +1,8 @@
 import random
+import pandas as pd        #this is the excel stuff
+import Dictionaries as D
+
+
 #Character Generator v0.1, 7 hours
 '''
 This program is made for generating a random Dungeons and Dragons 5th edition. As of right now, it makes only a 1st level character.
