@@ -1,6 +1,7 @@
 import random
-import pandas as pd
-import FeatDictionary
+import pandas as pd        #this is the excel stuff
+import Dictionaries as D
+
 
 #Character Generator v0.1, 7 hours
 '''
