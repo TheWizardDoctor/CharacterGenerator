@@ -5,7 +5,7 @@ import importlib
 
 D = importlib.reload(D) #This is for updating changes to the Dictionaries file
 
-#Character Generator v0.1, 11 hours
+#Character Generator v0.2, 12 hours
 '''
 This program is made for generating a random Dungeons and Dragons 5th edition. As of right now, it makes only a 1st level character.
 There are 3 settings: 
@@ -29,10 +29,16 @@ There are 3 settings:
 # Initiative = 0
 # Speed = 0
 
-
-def Random():
-    '''The Random Function will make a level 1 character at complete random.'''
+def PsuedoRandom():
+    x = True
+    Generator(x)
     
+def Random():
+    x = False
+    Generator(x)
+
+def Generator(x):
+    '''The Generator takes 1 argument, either True of False. If it is true then it makes a PsuedoRandom Character.'''
     '''This is resetting all of the key varaibles'''
     Level = 0
     Race = ""
@@ -65,9 +71,15 @@ def Random():
         for i in range(0,3):
             a += d6s[i]
         Abilities.append(a)
+        
+    if x:
+        q = str(input('Do you want to (A) randomly decide the Character\'s Background or (B) manualy decide it? ')).upper()
+        if q == 'A':
+            r = random.randint(0,len(D.loBackground-1))
+    else:
+        '''This will randomly deciding Background'''
+        r = random.randint(0,len(D.loBackground)-1)
     
-    '''This will randomly deciding Background'''
-    r = random.randint(0,len(D.loBackground)-1)
     Background = D.loBackground[r]
     bt = BackgroundTraits(Background, Feats, trSkills, Prof)
     s = getattr(bt, Background)()
@@ -76,38 +88,50 @@ def Random():
     trSkills = s[2]
     Prof = s[3]
     
-    '''This will randomly deciding Class'''
-    r = random.randint(0,len(D.loClass)-1)
-    Class = D.loClass[r]
-    ct = ClassTraits(Class, Abilities, Feats, trSkills, Prof, HP, Speed, Level)
-    s = getattr(ct, Class)()
-    Class = s[0]
-    Abilities = s[1]
-    Feats = s[2]
-    trSkills = s[3]
-    Prof = s[4]
-    HP = s[5]
-    Speed = s[6]
+    if x:
+        pass
+    else:
+        '''This will randomly deciding Class'''
+        r = random.randint(0,len(D.loClass)-1)
+        Class = D.loClass[r]
+        ct = ClassTraits(Class, Abilities, Feats, trSkills, Prof, HP, Speed, Level)
+        s = getattr(ct, Class)()
+        Class = s[0]
+        Abilities = s[1]
+        Feats = s[2]
+        trSkills = s[3]
+        Prof = s[4]
+        HP = s[5]
+        Speed = s[6]
     
-    '''This will randomly deciding Race'''
-    #r = random.randint(0,len(D.loRace)-1)
-    r = random.randint(0,1)
-    Race = D.loRace[r]
-    rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size)  
-    s = getattr(rt, Race)()
-    Race = s[0]
-    Abilities = s[1]
-    Feats = s[2]
-    trSkills = s[3]
-    Prof = s[4]
-    HP = s[5]
-    Speed = s[6]
-    Level = s[7]
-    Languages = s[8]
-    Size = s[9]    
+    if x:
+        pass
+    else:
+        '''This will randomly deciding Race'''
+        #r = random.randint(0,len(D.loRace)-1)
+        r = random.randint(0,1)
+        Race = D.loRace[r]
+        rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size)  
+        s = getattr(rt, Race)()
+        Race = s[0]
+        Abilities = s[1]
+        Feats = s[2]
+        trSkills = s[3]
+        Prof = s[4]
+        HP = s[5]
+        Speed = s[6]
+        Level = s[7]
+        Languages = s[8]
+        Size = s[9]    
     
-    '''This will randomly decide the alignment of the Character.'''
-    Alignment = D.Alignments[random.randint(0,8)]
+    if x:
+        pass
+    else:
+        '''This will randomly decide the alignment of the Character.'''
+        Alignment = D.Alignments[random.randint(0,8)]
+    
+    '''This is finalizing the HP'''
+    HP += int((Abilities[2]-10)/2)
     
     print(Race + '        ' + Class + '        ' + Background + '        ' + Size)
     print(Abilities)
@@ -140,7 +164,7 @@ class RacialTraits(object):
         
     def Dwarf(self):        
         self.Abilities[2] += 2
-        self.Speed = 25
+        self.Speed += 25
         self.Size = 'Medium'
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Dwarvish',self.Languages)
@@ -164,7 +188,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Elvish',self.Languages)
         self.Abilities[1] += 2
-        self.Speed = 30
+        self.Speed += 30
         self.Size = 'Medium'
         f = ['Darkvision','Keen Senses','Fey Ancestry','Trance']
         r= random.randint(0,2)
@@ -174,14 +198,14 @@ class RacialTraits(object):
             self.Languages = addLanguage('Common',self.Languages)
             f.append('Elf Weapon Training')
             f.append('Cantrip (High Elf)')
-        if r == 1:
+        elif r == 1:
             self.Race = 'Wood_Elf'
             self.Abilities[4] += 1
             f.append('Elf Weapon Training')
             f.append('Fleet of Foot')
-            self.Speed = 35
+            self.Speed += 5
             f.append('Mask of the Wild')
-        if r == 2:
+        else:
             self.Race = 'Dark_Elf'
             self.Abilities[5] += 1
             f.append('Superior Darkvision')
@@ -196,7 +220,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Halfling',self.Languages)
         self.Abilities[1] += 2
-        self.Speed = 25
+        self.Speed += 25
         self.Size = 'Small'
         f = ['Lucky','Brave','Halfling Nimbleness']
         r = random.randint(0,1)
@@ -204,7 +228,7 @@ class RacialTraits(object):
             self.Race = 'Lightfoot_Halfling'
             self.Abilities[5] += 1
             f.append('Naturally Stealthy')
-        if r == 1:
+        else:
             self.Race = 'Stout_Halfling'
             self.Abilities[2] += 1
             f.append('Stout Resilience')
@@ -215,7 +239,7 @@ class RacialTraits(object):
     def Human(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
-        self.Speed = 30
+        self.Speed += 30
         self.Size = 'Medium'
         for i in range(0,5):
             self.Abilities[i] += 1
@@ -226,7 +250,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Draconic',self.Languages)
         self.Abilities[0] += 2
         self.Abilities[5] += 1
-        self.Speed = 30
+        self.Speed += 30
         f = ['Draconic Ancestry','Breath Weapon','Damage Resistance (Dragonborn)']
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
@@ -236,6 +260,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Gnomish',self.Languages)
         self.Abilities[3] += 2
+        self.Speed += 25
         f = ['Darkvision','Gnome Cunning']
         r = random.randint(0,1)
         if r == 0:
@@ -243,7 +268,7 @@ class RacialTraits(object):
             self.Abilities[1] += 1
             f.append('Natural Illusionist')
             f.append('Speak With Beaasts')
-        if r == 1:
+        else:
             self.Race = 'Rock_Gnome'
             self.Abilities[2] +=1
             f.append('Artificer\'s Lore')
@@ -257,6 +282,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Elvish',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
         f = ['Darkvision','Fey Ancestry']
+        self.Speed += 30
         self.Abilities[5] += 2
         r = random.randint(0,4)
         self.Abilities[r] += 1
@@ -286,9 +312,9 @@ class RacialTraits(object):
         r = random.randing(0,2)
         if r ==0:
             self.Race = 'Protector_Aasimar'
-        if r == 1:
+        elif r == 1:
             self.Race = 'Scourge_Aasimar'
-        if r == 2:
+        else:
             self.Race = 'Fallen_Aasimar'
         return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
