@@ -4,6 +4,7 @@ import Dictionaries as D
 import importlib
 
 D = importlib.reload(D) #This is for updating changes to the Dictionaries file
+
 #Character Generator v0.1, 11 hours
 '''
 This program is made for generating a random Dungeons and Dragons 5th edition. As of right now, it makes only a 1st level character.
