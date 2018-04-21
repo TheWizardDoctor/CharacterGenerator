@@ -48,10 +48,12 @@ def Random():
     HP = 0
     Initiative = 0
     Speed = 0
+    Size = ''
+    
     '''Random level setter'''
     Level = random.randint(1,1)
     
-    '''This is randomly deciding Abilities'''
+    '''This will randomly deciding Abilities'''
     for i in range(0,6):
         d6s = []
         a = 0
@@ -63,7 +65,7 @@ def Random():
             a += d6s[i]
         Abilities.append(a)
     
-    '''This is randomly deciding Background'''
+    '''This will randomly deciding Background'''
     r = random.randint(0,len(D.loBackground)-1)
     Background = D.loBackground[r]
     bt = BackgroundTraits(Background, Feats, trSkills, Prof)
@@ -73,7 +75,7 @@ def Random():
     trSkills = s[2]
     Prof = s[3]
     
-    '''This is randomly deciding Class'''
+    '''This will randomly deciding Class'''
     r = random.randint(0,len(D.loClass)-1)
     Class = D.loClass[r]
     ct = ClassTraits(Class, Abilities, Feats, trSkills, Prof, HP, Speed, Level)
@@ -86,11 +88,11 @@ def Random():
     HP = s[5]
     Speed = s[6]
     
-    '''This is randomly deciding Race'''
+    '''This will randomly deciding Race'''
     #r = random.randint(0,len(D.loRace)-1)
-    r=0
+    r = random.randint(0,1)
     Race = D.loRace[r]
-    rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages)  
+    rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size)  
     s = getattr(rt, Race)()
     Race = s[0]
     Abilities = s[1]
@@ -98,14 +100,15 @@ def Random():
     trSkills = s[3]
     Prof = s[4]
     HP = s[5]
-    Speed = s[6]    
+    Speed = s[6]
+    Level = s[7]
+    Languages = s[8]
+    Size = s[9]    
     
     '''This will randomly decide the alignment of the Character.'''
     Alignment = D.Alignments[random.randint(0,8)]
     
-    print(Race)
-    print(Class)
-    print(Background)
+    print(Race + '        ' + Class + '        ' + Background + '        ' + Size)
     print(Abilities)
     print(Feats)
     print(trSkills)
@@ -121,7 +124,7 @@ def Random():
    
 class RacialTraits(object):
     '''This class is for adding the racial traits to the Character''' 
-    def __init__(self, Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages):
+    def __init__(self, Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size):
         self.Race = Race
         self.Abilities = Abilities
         self.Feats = Feats
@@ -131,109 +134,197 @@ class RacialTraits(object):
         self.Speed = Speed
         self.Level = Level
         self.Languages = Languages
+        self.Size = Size
         
         
     def Dwarf(self):        
         self.Abilities[2] += 2
-        self.Speed += 25
+        self.Speed = 25
+        self.Size = 'Medium'
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Dwarvish',self.Languages)
-        f = []
-        self.Feats = addFeat('Darkvision',self.Feats)
+        f = ['Darkvision','Dwarven Resilience','Dwarven Combat Training','Tool Proficiency (Dwarven)', 'Stonecunning']   
         if random.randint(0,2) == 0:
             self.Race = "Hill_Dwarf"
             self.Abilities[4] += 1
             self.HP += (self.Level*1)
+            f.append('Dwarven Toughness')
         else:
             self.Race = "Mountain_Dwarf"
             self.Abilities[0] += 2
             self.Prof.append("light armor")
             self. Prof.append('medium armor')
+            f.append('Dwarven Armor Training')
         for i in range(0,len(f)):
-            pass        
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages)
+            self.Feats = addFeat(f[i],self.Feats)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Elf(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Elvish',self.Languages)
+        self.Abilities[1] += 2
+        self.Speed = 30
+        self.Size = 'Medium'
+        f = ['Darkvision','Keen Senses','Fey Ancestry','Trance']
         r= random.randint(0,2)
         if r == 0:
+            self.Race = 'High_Elf'
+            self.Abilities[3] += 1
             self.Languages = addLanguage('Common',self.Languages)
+            f.append('Elf Weapon Training')
+            f.append('Cantrip (High Elf)')
         if r == 1:
-            pass
+            self.Race = 'Wood_Elf'
+            self.Abilities[4] += 1
+            f.append('Elf Weapon Training')
+            f.append('Fleet of Foot')
+            self.Speed = 35
+            f.append('Mask of the Wild')
         if r == 2:
-            pass
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+            self.Race = 'Dark_Elf'
+            self.Abilities[5] += 1
+            f.append('Superior Darkvision')
+            f.append('Sunlight Sensitivity')
+            f.append('Drow Magic')
+            f.append('Drow Weapon Training')
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Halfling(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Halfling',self.Languages)
+        self.Abilities[1] += 2
+        self.Speed = 25
+        self.Size = 'Small'
+        f = ['Lucky','Brave','Halfling Nimbleness']
         r = random.randint(0,1)
         if r == 0:
-            pass
+            self.Race = 'Lightfoot_Halfling'
+            self.Abilities[5] += 1
+            f.append('Naturally Stealthy')
         if r == 1:
-            pass
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+            self.Race = 'Stout_Halfling'
+            self.Abilities[2] += 1
+            f.append('Stout Resilience')
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Human(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Speed = 30
+        self.Size = 'Medium'
+        for i in range(0,5):
+            self.Abilities[i] += 1
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Dragonborn(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Draconic',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Abilities[0] += 2
+        self.Abilities[5] += 1
+        self.Speed = 30
+        f = ['Draconic Ancestry','Breath Weapon','Damage Resistance (Dragonborn)']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Gnome(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Gnomish',self.Languages)
+        self.Abilities[3] += 2
+        f = ['Darkvision','Gnome Cunning']
         r = random.randint(0,1)
         if r == 0:
-            pass
+            self.Race = 'Forest_Gnome'
+            self.Abilities[1] += 1
+            f.append('Natural Illusionist')
+            f.append('Speak With Beaasts')
         if r == 1:
-            pass
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+            self.Race = 'Rock_Gnome'
+            self.Abilities[2] +=1
+            f.append('Artificer\'s Lore')
+            f.append('Tinker')
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Half_Elf(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Elvish',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        f = ['Darkvision','Fey Ancestry']
+        self.Abilities[5] += 2
+        r = random.randint(0,4)
+        self.Abilities[r] += 1
+        t = True
+        while t == True:
+            k = random.randint(0,4)
+            if k != r:
+                self.Abilities[k] += 1
+                t = False
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Half_Orc(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Orcish',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Tiefling(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Infernal',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Aasimar(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Celestial',self.Languages)
+        r = random.randing(0,2)
+        if r ==0:
+            self.Race = 'Protector_Aasimar'
+        if r == 1:
+            self.Race = 'Scourge_Aasimar'
+        if r == 2:
+            self.Race = 'Fallen_Aasimar'
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Firblog(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Elvish',self.Languages)
+        self.Languages = addLanguage('Giant',self.Languages)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Goliath(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Giant',self.Languages)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Kenku(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Auran',self.Languages)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Lizardfolk(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Draconic',self.Languages)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Tabaxi(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Common',self.Languages)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Triton(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Primordial',self.Languages)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Monstrous(self):
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
+        print('ughhhhhhhhhhhhhhhhhhhhhhh')
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
     
         
    
