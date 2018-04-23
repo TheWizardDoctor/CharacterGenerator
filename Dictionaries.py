@@ -11,10 +11,12 @@ Feats = {
     'Draconic Ancestry':'', 'Breath Weapon':'', 'Damage Resistance (Dragonborn)':'',
     'Gnome Cunning':'', 'Natural Illusionist':'', 'Speak with Small Beasts':'', 'Artificer\'s Lore':'', 'Tinker':'',
     'Skill Versatility':'', 
+    'Menacing':'', 'Relentless Endurance':'', 'Savage Attacks':'',
+    'Hellish Resistance':'', 'Infernal Legacy':'',
     '':'' 
 }
 
-Skills = [
+loSkills = [
     'Strength Save', 'Dexterity Save', 'Constitution Save', 'Inteligence Save', 'Wisdom Save', 'Charisma Save', 
     'Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History', 
     'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception', 
@@ -33,4 +35,8 @@ loLanguages = [
     'Common', 'Draconic', 'Dwarvish', 'Elvish', 'Giant', 
     'Gnomish', 'Goblish', 'Halfling', 'Orcish', 'Abyssal', 
     'Celestial', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon' 
+]
+
+dAncestry = [
+    'Black', 'Blue', 'Brass', 'Bronze', 'Copper', 'Gold', 'Green', 'Red', 'Silver', 'White'
 ]

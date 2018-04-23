@@ -5,7 +5,7 @@ import importlib
 
 D = importlib.reload(D) #This is for updating changes to the Dictionaries file
 
-#Character Generator v0.2, 12 hours
+#Character Generator v0.2, 13 hours
 '''
 This program is made for generating a random Dungeons and Dragons 5th edition. As of right now, it makes only a 1st level character.
 There are 3 settings: 
@@ -47,7 +47,7 @@ def Generator(x):
     Alignment = ""
     Abilities = []
     Feats = []
-    Skills = []
+    Skills = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     trSkills = []
     Prof = []
     Languages = []
@@ -79,7 +79,6 @@ def Generator(x):
     else:
         '''This will randomly deciding Background'''
         r = random.randint(0,len(D.loBackground)-1)
-    
     Background = D.loBackground[r]
     bt = BackgroundTraits(Background, Feats, trSkills, Prof)
     s = getattr(bt, Background)()
@@ -92,7 +91,8 @@ def Generator(x):
         pass
     else:
         '''This will randomly deciding Class'''
-        r = random.randint(0,len(D.loClass)-1)
+        #r = random.randint(0,len(D.loClass)-1)
+        r = 0
         Class = D.loClass[r]
         ct = ClassTraits(Class, Abilities, Feats, trSkills, Prof, HP, Speed, Level)
         s = getattr(ct, Class)()
@@ -108,8 +108,8 @@ def Generator(x):
         pass
     else:
         '''This will randomly deciding Race'''
-        #r = random.randint(0,len(D.loRace)-1)
-        r = random.randint(0,1)
+        r = random.randint(0,len(D.loRace)-1)
+        #r = 4
         Race = D.loRace[r]
         rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size)  
         s = getattr(rt, Race)()
@@ -129,6 +129,28 @@ def Generator(x):
     else:
         '''This will randomly decide the alignment of the Character.'''
         Alignment = D.Alignments[random.randint(0,8)]
+        
+    '''This will calculate all of the skills.'''
+    for i in range(0,23):
+        STRskills = ['Strength Save', 'Athletics']
+        DEXskills = ['Dexterity Save', 'Acrobatics', 'Slieght of Hand', 'Stealth']
+        INTskills = ['Inteligence Save', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion']
+        WISskills = ['Wisdom Save', 'Animal Handling', 'Insight', 'Medicine', 'Perception', 'Survival']
+        CHAskills = ['Charisma Save', 'Deception',  'Intimidation', 'Performance']
+        if D.loSkills[i] in STRskills:
+            Skills[i] += int((Abilities[0]-10)/2)
+        elif D.loSkills[i] in DEXskills:
+            Skills[i] += int((Abilities[1]-10)/2)
+        elif D.loSkills[i] in INTskills:
+            Skills[i] += int((Abilities[3]-10)/2)
+        elif D.loSkills[i] in WISskills:
+            Skills[i] += int((Abilities[4]-10)/2)
+        elif D.loSkills[i] in CHAskills:
+            Skills[i] += int((Abilities[5]-10)/2)            
+        else:
+            Skills[i] += int((Abilities[2]-10)/2)
+        if i in trSkills:
+            Skills[i] += profBonus
     
     '''This is finalizing the HP'''
     HP += int((Abilities[2]-10)/2)
@@ -142,6 +164,7 @@ def Generator(x):
     print(Speed)
     print(Alignment)
     print(Languages)
+    print(Skills)
     
     # for i in range(0,len(trSkills)):
     #     print(D.Skills[trSkills[i]])
@@ -251,7 +274,8 @@ class RacialTraits(object):
         self.Abilities[0] += 2
         self.Abilities[5] += 1
         self.Speed += 30
-        f = ['Draconic Ancestry','Breath Weapon','Damage Resistance (Dragonborn)']
+        ancestry = '('+D.dAncestry[random.randint(0,len(D.dAncestry)-1)]+')'
+        f = ['Draconic Ancestry ' + ancestry ,'Breath Weapon ' + ancestry,'Damage Resistance (Dragonborn)']
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
         return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
@@ -281,7 +305,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Elvish',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
-        f = ['Darkvision','Fey Ancestry']
+        f = ['Darkvision','Fey Ancestry', 'Skill Versatility']
         self.Speed += 30
         self.Abilities[5] += 2
         r = random.randint(0,4)
@@ -299,17 +323,23 @@ class RacialTraits(object):
     def Half_Orc(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Orcish',self.Languages)
+        f = ['Darkvision', 'Menacing', 'Relentless Endurance', 'Savage Attacks']
+        for i in range (0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Tiefling(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Infernal',self.Languages)
+        f = ['Darkvision', 'Hellish Resistance', 'Infernal Legacy']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
         
     def Aasimar(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Celestial',self.Languages)
-        r = random.randing(0,2)
+        r = random.randint(0,2)
         if r ==0:
             self.Race = 'Protector_Aasimar'
         elif r == 1:
@@ -373,6 +403,9 @@ class ClassTraits(object):
         self.HP += 12    
         self.trSkills.append(0)
         self.trSkills.append(2)
+        skOptions = [7,9,13,16,17,23]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Bard(self): 
@@ -657,7 +690,7 @@ def addLanguage(Language, Languages):
     if Language not in Languages:
         Languages.append(Language)
     else:
-        while t == True:
+        while t:
             r = random.randint(0,14)
             if D.loLanguages[r] not in Languages:
                 Languages.append(D.loLanguages[r])
@@ -669,3 +702,11 @@ def addFeat(Feat, Feats):
         Feats.append(Feat)
     return Feats
         
+def addtrSkills(trSkills, skOptions):
+    t = True
+    while t:
+        r = random.randint(0,len(skOptions)-1)
+        if skOptions[r] not in trSkills:
+            trSkills.append(skOptions[r])
+            t = False
+    return trSkills
