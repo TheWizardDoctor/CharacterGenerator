@@ -39,6 +39,7 @@ def Random():
 
 def Generator(x):
     '''The Generator takes 1 argument, either True of False. If it is true then it makes a PsuedoRandom Character.'''
+    
     '''This is resetting all of the key varaibles'''
     Level = 0
     Race = ""
@@ -57,10 +58,29 @@ def Generator(x):
     Speed = 0
     Size = ''
     
-    '''Random level setter'''
-    Level = random.randint(1,1)
+    if x:
+        '''Level setter'''
+        t = True
+        while t:
+            q = str(input('Do you want to (A) randomly decide the Character\'s Level or (B) manualy decide it? ')).upper()
+            if q == 'A':
+                Level = random.randint(1,1)
+                t = False
+            elif q == 'B':
+                q = input('Please enter a integer between 1 and 1. If you don\'t then we\'ll have issues.')
+                try:
+                    q = int(q)
+                    Level = q
+                    t = False
+                except: 
+                    print('told ya we\'d have issues. ')   
+            else:
+                print('uh try again buddy')
+    else:
+        '''Random level setter'''
+        Level = random.randint(1,1)
     
-    '''This will randomly deciding Abilities'''
+    '''This will randomly decide Abilities'''
     for i in range(0,6):
         d6s = []
         a = 0
@@ -73,12 +93,28 @@ def Generator(x):
         Abilities.append(a)
         
     if x:
-        q = str(input('Do you want to (A) randomly decide the Character\'s Background or (B) manualy decide it? ')).upper()
-        if q == 'A':
-            r = random.randint(0,len(D.loBackground-1))
+        t = True
+        while t:
+            q = str(input('Do you want to (A) randomly decide the Character\'s Background or (B) manualy decide it? ')).upper()
+            if q == 'A':
+                r = random.randint(0,len(D.loBackground)-1)
+                t = False
+            elif q == 'B':
+                for i in range(0,len(D.loBackground)):
+                    print(str(i) + ') ' + D.loBackground[i])
+                q = input('Please select a Background: ')
+                try:
+                    r = int(q)
+                    a = D.loBackground[r]
+                    t = False
+                except:
+                    print('Please try again and use a number on the list this time.')
+            else:
+                print('uh try again buddy')
     else:
-        '''This will randomly deciding Background'''
+        '''This will randomly decide Background'''
         r = random.randint(0,len(D.loBackground)-1)
+    
     Background = D.loBackground[r]
     bt = BackgroundTraits(Background, Feats, trSkills, Prof)
     s = getattr(bt, Background)()
@@ -88,47 +124,99 @@ def Generator(x):
     Prof = s[3]
     
     if x:
-        pass
+        t = True
+        while t:
+            q = str(input('Do you want to (A) randomly decide the Character\'s Class or (B) manualy decide it? ')).upper()
+            if q == 'A':
+                r = random.randint(0,len(D.loClass)-1)
+                t = False
+            elif q == 'B':
+                for i in range(0,len(D.loClass)):
+                    print(str(i) + ') ' + D.loClass[i])
+                q = input('Please select a Class: ')
+                try:
+                    r = int(q)
+                    a = D.loClass[r]
+                    t = False
+                except:
+                    print('Please try again and use a number on the list this time.')
+            else:
+                print('uh try again buddy')
     else:
-        '''This will randomly deciding Class'''
-        #r = random.randint(0,len(D.loClass)-1)
-        r = 0
-        Class = D.loClass[r]
-        ct = ClassTraits(Class, Abilities, Feats, trSkills, Prof, HP, Speed, Level)
-        s = getattr(ct, Class)()
-        Class = s[0]
-        Abilities = s[1]
-        Feats = s[2]
-        trSkills = s[3]
-        Prof = s[4]
-        HP = s[5]
-        Speed = s[6]
+        '''This will randomly decide Class'''
+        r = random.randint(0,len(D.loClass)-1)
+        
+    Class = D.loClass[r]
+    ct = ClassTraits(Class, Abilities, Feats, trSkills, Prof, HP, Speed, Level)
+    s = getattr(ct, Class)()
+    Class = s[0]
+    Abilities = s[1]
+    Feats = s[2]
+    trSkills = s[3]
+    Prof = s[4]
+    HP = s[5]
+    Speed = s[6]
     
     if x:
-        pass
+        t = True
+        while t:
+            q = str(input('Do you want to (A) randomly decide the Character\'s Race or (B) manualy decide it? ')).upper()
+            if q == 'A':
+                r = random.randint(0,len(D.loRace)-1)
+                t = False
+            elif q == 'B':
+                for i in range(0,len(D.loRace)):
+                    print(str(i) + ') ' + D.loRace[i])
+                q = input('Please select a Race: ')
+                try:
+                    r = int(q)
+                    a = D.loRace[r]
+                    t = False
+                except:
+                    print('Please try again and use a number on the list this time.')
+            else:
+                print('uh try again buddy')
     else:
-        '''This will randomly deciding Race'''
+        '''This will randomly decide Race'''
         r = random.randint(0,len(D.loRace)-1)
-        #r = 4
-        Race = D.loRace[r]
-        rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size)  
-        s = getattr(rt, Race)()
-        Race = s[0]
-        Abilities = s[1]
-        Feats = s[2]
-        trSkills = s[3]
-        Prof = s[4]
-        HP = s[5]
-        Speed = s[6]
-        Level = s[7]
-        Languages = s[8]
-        Size = s[9]    
+        
+    Race = D.loRace[r]
+    rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size)  
+    s = getattr(rt, Race)()
+    Race = s[0]
+    Abilities = s[1]
+    Feats = s[2]
+    trSkills = s[3]
+    Prof = s[4]
+    HP = s[5]
+    Speed = s[6]
+    Level = s[7]
+    Languages = s[8]
+    Size = s[9]    
     
     if x:
-        pass
+        t = True
+        while t:
+            q = str(input('Do you want to (A) randomly decide the Character\'s Alignment or (B) manualy decide it? ')).upper()
+            if q == 'A':
+                r = random.randint(0,len(D.Alignments)-1)
+                t = False
+            elif q == 'B':
+                for i in range(0,len(D.Alignments)):
+                    print(str(i) + ') ' + D.Alignments[i])
+                q = input('Please select an Alignment: ')
+                try:
+                    r = int(q)
+                    a = D.Alignments[r]
+                    t = False
+                except:
+                    print('Please try again and use a number on the list this time.')
+            else:
+                print('uh try again buddy')
     else:
         '''This will randomly decide the alignment of the Character.'''
-        Alignment = D.Alignments[random.randint(0,8)]
+        r = random.randint(0,8)
+    Alignment = D.Alignments[r]
         
     '''This will calculate all of the skills.'''
     for i in range(0,23):
@@ -155,7 +243,11 @@ def Generator(x):
     '''This is finalizing the HP'''
     HP += int((Abilities[2]-10)/2)
     
+    Initiative += int((Abilities[1]-10)/2)
+    
+    print(Level)
     print(Race + '        ' + Class + '        ' + Background + '        ' + Size)
+    print(Initiative)
     print(Abilities)
     print(Feats)
     print(trSkills)
