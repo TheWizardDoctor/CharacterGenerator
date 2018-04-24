@@ -12,3 +12,5 @@ There will be 3 primary functions:
 I will add more stuff later like when it actually gets finished
 
 ***
+
+15ish hours
