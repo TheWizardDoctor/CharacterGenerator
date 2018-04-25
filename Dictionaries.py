@@ -13,7 +13,18 @@ Feats = {
     'Skill Versatility':'', 
     'Menacing':'', 'Relentless Endurance':'', 'Savage Attacks':'',
     'Hellish Resistance':'', 'Infernal Legacy':'',
-    '':'' 
+    '':'',
+    '':'',
+    '':'',
+    '':'',
+    '':'',
+    '':'',
+    '':'',
+    '':'',
+    'Shelter of the Faithful':'',
+    'False Identity':'',
+    'Criminal Contact':'',
+    'By Popular Demand':''
 }
 
 loSkills = [
@@ -37,6 +48,8 @@ loLanguages = [
     'Celestial', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon' 
 ]
 
-dAncestry = [
-    'Black', 'Blue', 'Brass', 'Bronze', 'Copper', 'Gold', 'Green', 'Red', 'Silver', 'White'
-]
+dAncestry = ['Black', 'Blue', 'Brass', 'Bronze', 'Copper', 'Gold', 'Green', 'Red', 'Silver', 'White']
+
+GamingSets = ['Dice set','Dragonchess set','Playing Card set','Three-Dragon Ante set']
+
+MusicalInstruments = ['Bagpipes','Drum','Dulcimer','Flute','Lute','Lyre','Horn','Pan Flute','Shawm','Viol']

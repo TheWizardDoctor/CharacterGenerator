@@ -14,21 +14,6 @@ There are 3 settings:
 3) A questoinaire that sends you through a question tree to decide your character traits.
 '''
 
-# Level = 0
-# Race = ""
-# Class = ""
-# Background = ""
-# Alignment = ""
-# Abilities = []
-# Feats = []
-# Skills = []
-# trSkills = []
-# Languages = []
-# profBonus = 0
-# HP = 0
-# Initiative = 0
-# Speed = 0
-
 def PsuedoRandom():
     x = True
     Generator(x)
@@ -84,12 +69,16 @@ def Generator(x):
     for i in range(0,6):
         d6s = []
         a = 0
-        for i in range(0,4):
-            d6s.append(random.randint(1,6))
-        d6s = sorted(d6s)
-        d6s = d6s[1:4]
-        for i in range(0,3):
-            a += d6s[i]
+        t = True
+        while t:
+            for i in range(0,4):
+                d6s.append(random.randint(1,6))
+            d6s = sorted(d6s)
+            d6s = d6s[1:4]
+            for i in range(0,3):
+                a += d6s[i]
+            if a >= 7:
+                t = False
         Abilities.append(a)
         
     if x:
@@ -506,6 +495,10 @@ class ClassTraits(object):
         self.HP += 8
         self.trSkills.append(1)
         self.trSkills.append(5)
+        skOptions = range(6,23)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Cleric(self):
@@ -514,6 +507,9 @@ class ClassTraits(object):
         self.HP += 8
         self.trSkills.append(4)
         self.trSkills.append(5)
+        skOptions = [11,12,15,19,20]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
          
     def Druid(self): 
@@ -522,6 +518,9 @@ class ClassTraits(object):
         self.HP += 8
         self.trSkills.append(3)
         self.trSkills.append(4)
+        skOptions = [7,8,12,15,16,17,20,23]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Fighter(self): 
@@ -534,6 +533,9 @@ class ClassTraits(object):
         self.HP += 10
         self.trSkills.append(0)
         self.trSkills.append(2)
+        skOptions = [6,7,9,11,12,13,17,23]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Monk(self): 
@@ -542,6 +544,9 @@ class ClassTraits(object):
         self.HP += 8
         self.trSkills.append(0)
         self.trSkills.append(1)
+        skOptions = [6,9,11,12,20,22]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Paladin(self): 
@@ -550,6 +555,9 @@ class ClassTraits(object):
         self.HP += 10
         self.trSkills.append(4)
         self.trSkills.append(5)
+        skOptions = [9,12,13,15,19,20]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Ranger(self): 
@@ -558,6 +566,10 @@ class ClassTraits(object):
         self.HP += 10
         self.trSkills.append(0)
         self.trSkills.append(1)
+        skOptions = [7,9,12,13,16,17,22,23]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Rogue(self): 
@@ -566,6 +578,11 @@ class ClassTraits(object):
         self.HP += 8
         self.trSkills.append(1)
         self.trSkills.append(3)
+        skOptions = [6,9,10,12,13,14,17,18,19,21,22]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Sorcerer(self): 
@@ -574,6 +591,9 @@ class ClassTraits(object):
         self.HP += 6
         self.trSkills.append(2)
         self.trSkills.append(5)
+        skOptions = [8,10,12,13,19,20]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Warlock(self): 
@@ -582,6 +602,9 @@ class ClassTraits(object):
         self.HP += 8
         self.trSkills.append(4)
         self.trSkills.append(5)
+        skOptions = [8,10,11,13,14,16,20]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
     def Wizard(self):
@@ -590,6 +613,9 @@ class ClassTraits(object):
         self.HP += 6
         self.trSkills.append(3)
         self.trSkills.append(4)
+        skOptions = [8,11,12,14,15,20]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
         return(self.Class, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level)
         
 class BackgroundTraits(object):
@@ -603,22 +629,35 @@ class BackgroundTraits(object):
     def Acolyte(self): 
         self.trSkills.append(12)
         self.trSkills.append(20)
-        self.Feats.append('Shelter of the Faithful')
+        self.Feats = addFeat('Shelter of the Faithful',self.Feats)
+        self.Languages = addLanguage('Common',self.Languages)
+        self.Languages = addLanguage('Common',self.Languages)
         return(self.Background, self.Feats, self.trSkills, self.Prof)
         
     def Charlatan(self): 
         self.trSkills.append(10)
         self.trSkills.append(21)
+        self.Feats = addFeat('False Identity',self.Feats)
+        self.Prof = addProf('Disguise Kit',self.Prof)
+        self.Prof = addProf('Forgery Kit',self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof)
         
     def Criminal(self): 
         self.trSkills.append(10)
         self.trSkills.append(22)
+        self.Feats = addFeat('Criminal Contact',self.Feats)
+        self.Prof = addProf('Thieves\' Tools',self.Prof)
+        r = random.randint(0,len(D.GamingSets)-1)
+        self.Prof = (D.GamingSets[r],self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof)
         
     def Entertainer(self): 
         self.trSkills.append(6)
         self.trSkills.append(18)
+        self.Feats = addFeat('By Popular Demand',self.Feats)
+        self.Prof = addProf('Disguise Kit',self.Prof)
+        r = random.randint(0,len(D.MusicalInstruments)-1)
+        self.Prof = addProf(D.MusicalInstruments[r],self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof)
         
     def Folk_Hero(self):
@@ -802,3 +841,8 @@ def addtrSkills(trSkills, skOptions):
             trSkills.append(skOptions[r])
             t = False
     return trSkills
+    
+def addProf(prof, Prof):
+    if prof not in Prof:
+        Prof.append(prof)
+    return Prof
