@@ -507,13 +507,20 @@ class RacialTraits(object):
     def Aasimar(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Celestial',self.Languages)
+        self.speed += 30
         r = random.randint(0,2)
+        f = ['Darkvision','Healing Hands','Light Bearer']
         if r ==0:
             self.Race = 'Protector_Aasimar'
+            f.append('Radiant Soul')
         elif r == 1:
             self.Race = 'Scourge_Aasimar'
+            f.append('Radiant Consumption')
         else:
             self.Race = 'Fallen_Aasimar'
+            f.append('Necrotic Shroud')  
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         self.Weight = 110
         self.Height = 56
         d1 = random.randint(1,10)+random.randint(1,10)
@@ -526,6 +533,10 @@ class RacialTraits(object):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Elvish',self.Languages)
         self.Languages = addLanguage('Giant',self.Languages)
+        self.Speed += 30
+        f = ['Firblog Magic','Hidden Step','Powerful Build','Speech of Beast and Leaf']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         self.Height = 74
         self.Weight = 175
         d1 = random.randint(1,12)+random.randint(1,12)
@@ -536,7 +547,11 @@ class RacialTraits(object):
         
     def Goliath(self):
         self.Languages = addLanguage('Common',self.Languages)
-        self.Languages = addLanguage('Giant',self.Languages)
+        self.Languages = addLanguage('Giant',self.Languages)        
+        self.trSkills.append(9)
+        f = ['Natural Athlete','Stone\'s Endurance','Powerful Build','Mountain Born']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         self.Height = 74
         self.Weight = 200
         d1 = random.randint(1,10)+random.randint(1,10)
@@ -548,6 +563,13 @@ class RacialTraits(object):
     def Kenku(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Auran',self.Languages)
+        self.Speed += 30
+        skOptions = [6,10,22,21]
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        self.trSkills = addtrSkills(self.trSkills,skOptions)
+        f = ['Expert Forgery','Kenku Training','Mimicry']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         self.Height = 52
         self.Weight = 50
         d1 = random.randint(1,8)+random.randint(1,8)
@@ -559,6 +581,10 @@ class RacialTraits(object):
     def Lizardfolk(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Draconic',self.Languages)
+        self.Speed += 30
+        f = ['Lizardfolk Swimming Speed','Bite','Cunning Artisan','Hold Breath','Hunter\'s Lore','Natural Armor']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         self.Height = 58
         self.Weight = 120
         d1 = random.randint(1,10)+random.randint(1,10)
@@ -570,6 +596,12 @@ class RacialTraits(object):
     def Tabaxi(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
+        self.Speed += 30
+        self.trSkills.append(17)
+        self.trSkills.append(22)
+        f = ['Darkvision','Feline Agility','Cat\'s Claws','Cat\'s Talent']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         self.Height = 58
         self.Weight = 90
         d1 = random.randint(1,10)+random.randint(1,10)
@@ -581,6 +613,11 @@ class RacialTraits(object):
     def Triton(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Primordial',self.Languages)
+        self.Speed += 30
+        self.trSkills.append(22)
+        f = ['Triton Swimming Speed','Amphibious','Control Air and Water','Emissary of the Sea','Guardians of the Depths']
+        for i in range(0,len(f)):
+            self.Feats = addFeat(f[i],self.Feats)
         self.Height = 54
         self.Weight = 90
         d1 = random.randint(1,10)+random.randint(1,10)

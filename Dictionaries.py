@@ -13,18 +13,19 @@ Feats = {
     'Skill Versatility':'', 
     'Menacing':'', 'Relentless Endurance':'', 'Savage Attacks':'',
     'Hellish Resistance':'', 'Infernal Legacy':'',
-    '':'',
-    '':'',
-    '':'',
-    '':'',
-    '':'',
-    '':'',
-    '':'',
+    'Healing Hands':'', 'Light Bearer':'', 'Radiant Soul':'', 'Radiant Consumption':'', 'Necrotic Shroud':'',
+    'Firblog Magic':'', 'Hidden Step':'', 'Powerful Build':'', 'Speech of Beast and Leaf':'',
+    'Natural Athlete':'', 'Stone\'s Endurance':'', 'Mountain Born':'',
+    'Expert Forgery':'', 'Kenku Training':'', 'Mimicry':'',
+    'Lizardfolk Swimming Speed':'', 'Bite':'', 'Cunning Artisan':'', 'Hold Breath':'', 'Hunter\'s Lore':'', 'Natural Armor':'',
+    'Feline Agility':'','Cat\'s Claws':'','Cat\'s Talent':'',
+    'Triton Swimming Speed':'', 'Amphibious':'', 'Control Air and Water':'', 'Emissary of the Sea':'', 'Guardians of the Depths':'',
     '':'',
     'Shelter of the Faithful':'',
     'False Identity':'',
     'Criminal Contact':'',
-    'By Popular Demand':''
+    'By Popular Demand':'',
+    '':''
 }
 
 loSkills = [
