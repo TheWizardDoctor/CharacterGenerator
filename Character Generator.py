@@ -14,15 +14,20 @@ There are 3 settings:
 3) A questoinaire that sends you through a question tree to decide your character traits.
 '''
 
+def TEST():
+    x = False
+    for i in range(0,len(D.loRace)-1):
+        Generator(x,'T',i)
+
 def PsuedoRandom():
     x = True
-    Generator(x)
+    Generator(x,'','')
     
 def Random():
     x = False
-    Generator(x)
+    Generator(x,'','')
 
-def Generator(x):
+def Generator(x,y,z):
     '''The Generator takes 1 argument, either True of False. If it is true then it makes a PsuedoRandom Character.'''
     
     '''This is resetting all of the key varaibles'''
@@ -42,6 +47,8 @@ def Generator(x):
     Initiative = 0
     Speed = 0
     Size = ''
+    Height = 0
+    Weight = 0
     
     if x:
         '''Level setter'''
@@ -105,12 +112,13 @@ def Generator(x):
         r = random.randint(0,len(D.loBackground)-1)
     
     Background = D.loBackground[r]
-    bt = BackgroundTraits(Background, Feats, trSkills, Prof)
+    bt = BackgroundTraits(Background, Feats, trSkills, Prof, Languages)
     s = getattr(bt, Background)()
     Background = s[0]
     Feats = s[1]
     trSkills = s[2]
     Prof = s[3]
+    Languages = s[4]
     
     if x:
         t = True
@@ -165,12 +173,14 @@ def Generator(x):
                     print('Please try again and use a number on the list this time.')
             else:
                 print('uh try again buddy')
+    elif y == 'T':
+        r = z
     else:
         '''This will randomly decide Race'''
         r = random.randint(0,len(D.loRace)-1)
         
     Race = D.loRace[r]
-    rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size)  
+    rt =  RacialTraits(Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size, Height, Weight)  
     s = getattr(rt, Race)()
     Race = s[0]
     Abilities = s[1]
@@ -181,7 +191,9 @@ def Generator(x):
     Speed = s[6]
     Level = s[7]
     Languages = s[8]
-    Size = s[9]    
+    Size = s[9]   
+    Height = s[10]
+    Weight = s[11] 
     
     if x:
         t = True
@@ -232,10 +244,20 @@ def Generator(x):
     '''This is finalizing the HP'''
     HP += int((Abilities[2]-10)/2)
     
+    '''Putting the Height into in ft and inches'''
+    Height = str(int(Height/12))+"' "+ str(Height%12)+'"'
+    
+    '''Setting the Initiative'''
     Initiative += int((Abilities[1]-10)/2)
     
+    #----------------------------
+    Skillspretty = ''
+    for i in range(0,len(D.loSkills)-1):
+        Skillspretty += (D.loSkills[i] + ': ' + str(Skills[i]) + '  ')
+    #----------------------------
+    
     print(Level)
-    print(Race + '        ' + Class + '        ' + Background + '        ' + Size)
+    print(Race + '        ' + Class + '        ' + Background + '        ' + Size + '        ' + str(Height) + '        ' + str(Weight))
     print(Initiative)
     print(Abilities)
     print(Feats)
@@ -245,15 +267,12 @@ def Generator(x):
     print(Speed)
     print(Alignment)
     print(Languages)
-    print(Skills)
-    
-    # for i in range(0,len(trSkills)):
-    #     print(D.Skills[trSkills[i]])
-    
+    print(Skillspretty)
+        
    
 class RacialTraits(object):
     '''This class is for adding the racial traits to the Character''' 
-    def __init__(self, Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size):
+    def __init__(self, Race, Abilities, Feats, trSkills, Prof, HP, Speed, Level, Languages, Size, Height, Weight):
         self.Race = Race
         self.Abilities = Abilities
         self.Feats = Feats
@@ -264,6 +283,8 @@ class RacialTraits(object):
         self.Level = Level
         self.Languages = Languages
         self.Size = Size
+        self.Height = Height
+        self.Weight = Weight
         
         
     def Dwarf(self):        
@@ -278,15 +299,23 @@ class RacialTraits(object):
             self.Abilities[4] += 1
             self.HP += (self.Level*1)
             f.append('Dwarven Toughness')
+            self.Height = 44
+            self.Weight = 115
         else:
             self.Race = "Mountain_Dwarf"
             self.Abilities[0] += 2
             self.Prof.append("light armor")
-            self. Prof.append('medium armor')
+            self.Prof.append('medium armor')
             f.append('Dwarven Armor Training')
+            self.Height = 48
+            self.Weight = 130
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        d1 = random.randint(1,4)+random.randint(1,4)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,6)+random.randint(1,6))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Elf(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -302,6 +331,12 @@ class RacialTraits(object):
             self.Languages = addLanguage('Common',self.Languages)
             f.append('Elf Weapon Training')
             f.append('Cantrip (High Elf)')
+            self.Height = 54
+            self.Weight = 90
+            d1 = random.randint(1,10)+random.randint(1,10)
+            self.Height += d1
+            d2 = d1 * random.randint(1,4)
+            self.Weight += d2
         elif r == 1:
             self.Race = 'Wood_Elf'
             self.Abilities[4] += 1
@@ -309,6 +344,12 @@ class RacialTraits(object):
             f.append('Fleet of Foot')
             self.Speed += 5
             f.append('Mask of the Wild')
+            self.Height = 56
+            self.Weight = 100
+            d1 = random.randint(1,10)+random.randint(1,10)
+            self.Height += d1
+            d2 = d1 * random.randint(1,4)
+            self.Weight += d2
         else:
             self.Race = 'Dark_Elf'
             self.Abilities[5] += 1
@@ -316,9 +357,15 @@ class RacialTraits(object):
             f.append('Sunlight Sensitivity')
             f.append('Drow Magic')
             f.append('Drow Weapon Training')
+            self.Height = 53
+            self.Weight = 75
+            d1 = random.randint(1,6)+random.randint(1,6)
+            self.Height += d1
+            d2 = d1 * random.randint(1,6)
+            self.Weight += d2
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Halfling(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -338,7 +385,12 @@ class RacialTraits(object):
             f.append('Stout Resilience')
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 31
+        self.Weight = 35
+        d1 = random.randint(1,4)+random.randint(1,4)
+        self.Height += d1
+        self.Weight += d1
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Human(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -347,7 +399,13 @@ class RacialTraits(object):
         self.Size = 'Medium'
         for i in range(0,5):
             self.Abilities[i] += 1
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Weight = 110
+        self.Height = 56
+        d1 = random.randint(1,10)+random.randint(1,10)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,4)+random.randint(1,4))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Dragonborn(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -359,7 +417,13 @@ class RacialTraits(object):
         f = ['Draconic Ancestry ' + ancestry ,'Breath Weapon ' + ancestry,'Damage Resistance (Dragonborn)']
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 66
+        self.Weight = 175
+        d1 = random.randint(1,8)+random.randint(1,8)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,6)+random.randint(1,6))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Gnome(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -380,7 +444,12 @@ class RacialTraits(object):
             f.append('Tinker')
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 35
+        self.Weight = 35
+        d1 = random.randint(1,4)+random.randint(1,4)
+        self.Height += d1
+        self.Weight += d1
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Half_Elf(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -399,7 +468,13 @@ class RacialTraits(object):
                 t = False
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 57
+        self.Weight = 110
+        d1 = random.randint(1,8)+random.randint(1,8)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,4)+random.randint(1,4))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Half_Orc(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -407,7 +482,13 @@ class RacialTraits(object):
         f = ['Darkvision', 'Menacing', 'Relentless Endurance', 'Savage Attacks']
         for i in range (0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 58
+        self.Weight = 140
+        d1 = random.randint(1,10)+random.randint(1,10)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,6)+random.randint(1,6))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Tiefling(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -415,7 +496,13 @@ class RacialTraits(object):
         f = ['Darkvision', 'Hellish Resistance', 'Infernal Legacy']
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 57
+        self.Weight = 110
+        d1 = random.randint(1,8)+random.randint(1,8)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,4)+random.randint(1,4))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Aasimar(self):
         self.Languages = addLanguage('Common',self.Languages)
@@ -427,42 +514,84 @@ class RacialTraits(object):
             self.Race = 'Scourge_Aasimar'
         else:
             self.Race = 'Fallen_Aasimar'
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Weight = 110
+        self.Height = 56
+        d1 = random.randint(1,10)+random.randint(1,10)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,4)+random.randint(1,4))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Firblog(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Elvish',self.Languages)
         self.Languages = addLanguage('Giant',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 74
+        self.Weight = 175
+        d1 = random.randint(1,12)+random.randint(1,12)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,6)+random.randint(1,6))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Goliath(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Giant',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 74
+        self.Weight = 200
+        d1 = random.randint(1,10)+random.randint(1,10)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,6)+random.randint(1,6))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Kenku(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Auran',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 52
+        self.Weight = 50
+        d1 = random.randint(1,8)+random.randint(1,8)
+        self.Height += d1
+        d2 = d1 * random.randint(1,6)
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Lizardfolk(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Draconic',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 58
+        self.Weight = 120
+        d1 = random.randint(1,10)+random.randint(1,10)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,6)+random.randint(1,6))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Tabaxi(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 58
+        self.Weight = 90
+        d1 = random.randint(1,10)+random.randint(1,10)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,4)+random.randint(1,4))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Triton(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Primordial',self.Languages)
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        self.Height = 54
+        self.Weight = 90
+        d1 = random.randint(1,10)+random.randint(1,10)
+        self.Height += d1
+        d2 = d1 * (random.randint(1,4)+random.randint(1,4))
+        self.Weight += d2
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
         
     def Monstrous(self):
         print('ughhhhhhhhhhhhhhhhhhhhhhh')
-        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size)
+        return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
     
         
    
@@ -620,11 +749,12 @@ class ClassTraits(object):
         
 class BackgroundTraits(object):
     '''This is the class for assigning all the traits related to their background.'''
-    def __init__(self, Background, Feats, trSkills, Prof):
+    def __init__(self, Background, Feats, trSkills, Prof, Languages):
         self.Background = Background
         self.Feats = Feats
         self.trSkills = trSkills
         self.Prof = Prof
+        self.Languages = Languages
     
     def Acolyte(self): 
         self.trSkills.append(12)
@@ -632,7 +762,7 @@ class BackgroundTraits(object):
         self.Feats = addFeat('Shelter of the Faithful',self.Feats)
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Common',self.Languages)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Charlatan(self): 
         self.trSkills.append(10)
@@ -640,7 +770,7 @@ class BackgroundTraits(object):
         self.Feats = addFeat('False Identity',self.Feats)
         self.Prof = addProf('Disguise Kit',self.Prof)
         self.Prof = addProf('Forgery Kit',self.Prof)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Criminal(self): 
         self.trSkills.append(10)
@@ -649,7 +779,7 @@ class BackgroundTraits(object):
         self.Prof = addProf('Thieves\' Tools',self.Prof)
         r = random.randint(0,len(D.GamingSets)-1)
         self.Prof = (D.GamingSets[r],self.Prof)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Entertainer(self): 
         self.trSkills.append(6)
@@ -658,52 +788,52 @@ class BackgroundTraits(object):
         self.Prof = addProf('Disguise Kit',self.Prof)
         r = random.randint(0,len(D.MusicalInstruments)-1)
         self.Prof = addProf(D.MusicalInstruments[r],self.Prof)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Folk_Hero(self):
         self.trSkills.append(7)
         self.trSkills.append(23)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Guild_Artisan(self):
         self.trSkills.append(12)
         self.trSkills.append(19)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Hermit(self): 
         self.trSkills.append(15)
         self.trSkills.append(20)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Noble(self): 
         self.trSkills.append(11)
         self.trSkills.append(19)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Outlander(self): 
         self.trSkills.append(9)
         self.trSkills.append(23)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Sage(self): 
         self.trSkills.append(8)
         self.trSkills.append(11)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Sailor(self): 
         self.trSkills.append(9)
         self.trSkills.append(17)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Soldier(self): 
         self.trSkills.append(9)
         self.trSkills.append(13)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Urchin(self):
         self.trSkills.append(21)
         self.trSkills.append(22)
-        return(self.Background, self.Feats, self.trSkills, self.Prof)
+        return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
     
 
 

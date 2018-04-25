@@ -53,3 +53,15 @@ dAncestry = ['Black', 'Blue', 'Brass', 'Bronze', 'Copper', 'Gold', 'Green', 'Red
 GamingSets = ['Dice set','Dragonchess set','Playing Card set','Three-Dragon Ante set']
 
 MusicalInstruments = ['Bagpipes','Drum','Dulcimer','Flute','Lute','Lyre','Horn','Pan Flute','Shawm','Viol']
+
+Tools = []
+
+LightArmor = []
+
+MediumArmor = []
+
+HeavyArmor = []
+
+SimpleWeapons = []
+
+MartialWeapons = []
