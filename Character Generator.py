@@ -5,7 +5,7 @@ import importlib
 
 D = importlib.reload(D) #This is for updating changes to the Dictionaries file
 
-#Character Generator v0.2, 13 hours
+#Character Generator v0.2, 20 hours
 '''
 This program is made for generating a random Dungeons and Dragons 5th edition. As of right now, it makes only a 1st level character.
 There are 3 settings: 
@@ -17,13 +17,19 @@ There are 3 settings:
 def TEST():
     x = False
     for i in range(0,len(D.loBackground)):
-        print(str(i) + ') ' + D.loBackground[i] + '\n')
+        print(str(i) + ') ' + D.loBackground[i])
     
     yeet = int(input('which background will you choose??? '))
     i = yeet
-    for j in range(0,len(D.loClass)-1):
-        for k in range(0,len(D.loRace)-1):
-            Generator(x,'T',i,j,k)
+    yoot = str(input('(a) first half or (b) second half? '))
+    if yoot == 'a':
+        for j in range(0,5):
+            for k in range(0,len(D.loRace)-1):
+                Generator(x,'T',i,j,k)
+    if yoot == 'b':
+        for j in range(6,12):
+            for k in range(0,len(D.loRace)-1):
+                Generator(x,'T',i,j,k)
     
 def PsuedoRandom():
     x = True
@@ -266,7 +272,7 @@ def Generator(x,y,z,zz,zzz):
         Skillspretty += (D.loSkills[i] + ': ' + str(Skills[i]) + '  ')
     #----------------------------
     
-    print('\n --------------------------------------------------------------------')
+    print('--------------------------------------------------------------------')
     print(Level)
     print(Race + '        ' + Class + '        ' + Background + '        ' + Size + '        ' + str(Height) + '        ' + str(Weight))
     print(Initiative)
@@ -279,7 +285,7 @@ def Generator(x,y,z,zz,zzz):
     print(Alignment)
     print(Languages)
     print(Skillspretty)
-    print('-------------------------------------------------------------------- \n')
+    print('--------------------------------------------------------------------')
         
    
 class RacialTraits(object):
@@ -305,7 +311,10 @@ class RacialTraits(object):
         self.Size = 'Medium'
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Dwarvish',self.Languages)
-        f = ['Darkvision','Dwarven Resilience','Dwarven Combat Training','Tool Proficiency (Dwarven)', 'Stonecunning']   
+        f = ['Darkvision','Dwarven Resilience','Dwarven Combat Training','Tool Proficiency (Dwarven)', 'Stonecunning'] 
+        p = ['Battleaxe','Handaxe','Light Hammer','Warhammer']
+        art = ['Smith\'s tools','Brewer\'s supplies','Mason\'s tools']
+        p.append(art[random.randint(0,2)])  
         if random.randint(0,2) == 0:
             self.Race = "Hill_Dwarf"
             self.Abilities[4] += 1
@@ -316,11 +325,12 @@ class RacialTraits(object):
         else:
             self.Race = "Mountain_Dwarf"
             self.Abilities[0] += 2
-            self.Prof.append("light armor")
-            self.Prof.append('medium armor')
+            p += ["light armor",'medium armor']
             f.append('Dwarven Armor Training')
             self.Height = 48
             self.Weight = 130
+        for i in range(0,len(p)):
+            self.Prof = addProf(p[i],self.Prof)
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
         d1 = random.randint(1,4)+random.randint(1,4)
@@ -335,6 +345,8 @@ class RacialTraits(object):
         self.Abilities[1] += 2
         self.Speed += 30
         self.Size = 'Medium'
+        self.trSkills.append(17)
+        p = []
         f = ['Darkvision','Keen Senses','Fey Ancestry','Trance']
         r= random.randint(0,2)
         if r == 0:
@@ -349,6 +361,7 @@ class RacialTraits(object):
             self.Height += d1
             d2 = d1 * random.randint(1,4)
             self.Weight += d2
+            p += ['longsword','shortsword','shortbow','longbow']
         elif r == 1:
             self.Race = 'Wood_Elf'
             self.Abilities[4] += 1
@@ -362,6 +375,7 @@ class RacialTraits(object):
             self.Height += d1
             d2 = d1 * random.randint(1,4)
             self.Weight += d2
+            p += ['longsword','shortsword','shortbow','longbow']
         else:
             self.Race = 'Dark_Elf'
             self.Abilities[5] += 1
@@ -375,6 +389,9 @@ class RacialTraits(object):
             self.Height += d1
             d2 = d1 * random.randint(1,6)
             self.Weight += d2
+            p += ['rapiers','shortswords','hand crossbows']
+        for i in range(0,len(p)):
+            self.Prof = addProf(p[i],self.Prof)
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
         return(self.Race, self.Abilities, self.Feats, self.trSkills, self.Prof, self.HP, self.Speed, self.Level, self.Languages, self.Size, self.Height, self.Weight)
@@ -454,6 +471,7 @@ class RacialTraits(object):
             self.Abilities[2] +=1
             f.append('Artificer\'s Lore')
             f.append('Tinker')
+            self.Prof = addProf('Tinker\'s tools',self.Prof)
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
         self.Height = 35
@@ -492,6 +510,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Orcish',self.Languages)
         f = ['Darkvision', 'Menacing', 'Relentless Endurance', 'Savage Attacks']
+        self.trSkills.append(13)
         for i in range (0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
         self.Height = 58
@@ -521,7 +540,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Celestial',self.Languages)
         self.Speed += 30
         r = random.randint(0,2)
-        f = ['Darkvision','Healing Hands','Light Bearer']
+        f = ['Darkvision','Celestial Resistance','Healing Hands','Light Bearer']
         if r ==0:
             self.Race = 'Protector_Aasimar'
             f.append('Radiant Soul')
@@ -561,6 +580,7 @@ class RacialTraits(object):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Giant',self.Languages)        
         self.trSkills.append(9)
+        self.Speed += 30
         f = ['Natural Athlete','Stone\'s Endurance','Powerful Build','Mountain Born']
         for i in range(0,len(f)):
             self.Feats = addFeat(f[i],self.Feats)
