@@ -16,18 +16,24 @@ There are 3 settings:
 
 def TEST():
     x = False
-    for i in range(0,len(D.loRace)-1):
-        Generator(x,'T',i)
-
+    for i in range(0,len(D.loBackground)):
+        print(str(i) + ') ' + D.loBackground[i] + '\n')
+    
+    yeet = int(input('which background will you choose??? '))
+    i = yeet
+    for j in range(0,len(D.loClass)-1):
+        for k in range(0,len(D.loRace)-1):
+            Generator(x,'T',i,j,k)
+    
 def PsuedoRandom():
     x = True
-    Generator(x,'','')
+    Generator(x,'','','','')
     
 def Random():
     x = False
-    Generator(x,'','')
+    Generator(x,'','','','')
 
-def Generator(x,y,z):
+def Generator(x,y,z,zz,zzz):
     '''The Generator takes 1 argument, either True of False. If it is true then it makes a PsuedoRandom Character.'''
     
     '''This is resetting all of the key varaibles'''
@@ -107,6 +113,8 @@ def Generator(x,y,z):
                     print('Please try again and use a number on the list this time.')
             else:
                 print('uh try again buddy')
+    elif y == 'T':
+        r = z
     else:
         '''This will randomly decide Background'''
         r = random.randint(0,len(D.loBackground)-1)
@@ -139,6 +147,8 @@ def Generator(x,y,z):
                     print('Please try again and use a number on the list this time.')
             else:
                 print('uh try again buddy')
+    elif y == 'T':
+        r = zz
     else:
         '''This will randomly decide Class'''
         r = random.randint(0,len(D.loClass)-1)
@@ -174,7 +184,7 @@ def Generator(x,y,z):
             else:
                 print('uh try again buddy')
     elif y == 'T':
-        r = z
+        r = zzz
     else:
         '''This will randomly decide Race'''
         r = random.randint(0,len(D.loRace)-1)
@@ -256,6 +266,7 @@ def Generator(x,y,z):
         Skillspretty += (D.loSkills[i] + ': ' + str(Skills[i]) + '  ')
     #----------------------------
     
+    print('\n --------------------------------------------------------------------')
     print(Level)
     print(Race + '        ' + Class + '        ' + Background + '        ' + Size + '        ' + str(Height) + '        ' + str(Weight))
     print(Initiative)
@@ -268,6 +279,7 @@ def Generator(x,y,z):
     print(Alignment)
     print(Languages)
     print(Skillspretty)
+    print('-------------------------------------------------------------------- \n')
         
    
 class RacialTraits(object):
@@ -507,7 +519,7 @@ class RacialTraits(object):
     def Aasimar(self):
         self.Languages = addLanguage('Common',self.Languages)
         self.Languages = addLanguage('Celestial',self.Languages)
-        self.speed += 30
+        self.Speed += 30
         r = random.randint(0,2)
         f = ['Darkvision','Healing Hands','Light Bearer']
         if r ==0:
@@ -830,46 +842,73 @@ class BackgroundTraits(object):
     def Folk_Hero(self):
         self.trSkills.append(7)
         self.trSkills.append(23)
+        self.Feats = addFeat('Rustic Hospitality',self.Feats)
+        self.Prof = addProf('Vehicles (land)',self.Prof)
+        self.Prof = addProf(D.Tools[random.randint(0,len(D.Tools)-1)],self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Guild_Artisan(self):
         self.trSkills.append(12)
         self.trSkills.append(19)
+        self.Feats = addFeat('Guild Membership',self.Feats)
+        self.Language = addLanguage('Common',self.Languages)
+        self.Prof = addProf(D.Tools[random.randint(0,len(D.Tools)-1)],self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Hermit(self): 
         self.trSkills.append(15)
         self.trSkills.append(20)
+        self.Feats = addFeat('Discovery',self.Feats)
+        self.Language = addLanguage('Common',self.Languages)
+        self.Prof = addProf('Herbalism kit',self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Noble(self): 
         self.trSkills.append(11)
         self.trSkills.append(19)
+        self.Feats = addFeat('Position of Privilege',self.Feats)
+        self.Language = addLanguage('Common',self.Languages)
+        self.Prof = addProf(D.GamingSets[random.randint(0,len(D.GamingSets)-1)],self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Outlander(self): 
         self.trSkills.append(9)
         self.trSkills.append(23)
+        self.Feats = addFeat('Wanderer',self.Feats)
+        self.Language = addLanguage('Common',self.Languages)
+        self.Prof = addProf(D.MusicalInstruments[random.randint(0,len(D.MusicalInstruments)-1)],self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Sage(self): 
         self.trSkills.append(8)
         self.trSkills.append(11)
+        self.Feats = addFeat('Reasearcher',self.Feats)
+        self.Language = addLanguage('Common',self.Languages)
+        self.Language = addLanguage('Common',self.Languages)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Sailor(self): 
         self.trSkills.append(9)
         self.trSkills.append(17)
+        self.Feats = addFeat('Ship\'s Passage',self.Feats)
+        self.Prof = addProf('Navigator\'s tools',self.Prof)
+        self.Prof = addProf('Vehicles (water)',self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Soldier(self): 
         self.trSkills.append(9)
         self.trSkills.append(13)
+        self.Feats = addFeat('Military Rank',self.Feats)
+        self.Prof = addProf('Vehicles (land)',self.Prof)
+        self.Prof = addProf(D.GamingSets[random.randint(0,len(D.GamingSets)-1)],self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
         
     def Urchin(self):
         self.trSkills.append(21)
         self.trSkills.append(22)
+        self.Feats = addFeat('City Secrets',self.Feats)
+        self.Prof = addProf('Disguise Kit',self.Prof)
+        self.Prof = addProf('Thieves Tools',self.Prof)
         return(self.Background, self.Feats, self.trSkills, self.Prof, self.Languages)
     
 
